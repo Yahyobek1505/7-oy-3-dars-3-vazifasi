@@ -3,19 +3,24 @@ const defaultState = {
 };
 
 export function todoReducer(state = defaultState, action) {
+  let copied = JSON.parse(JSON.stringify(state.todos));
   if (action.type == "ADD_TODO") {
-    let copied = JSON.parse(JSON.stringify(state.todos));
     copied.push(action.payload);
-    return {...state, todos: copied}
+    return { ...state, todos: copied };
   } else if (action.type == "DELETE_TODO") {
-    let copied = JSON.parse(JSON.stringify(state.todos));
-    copied = copied.filter(el => {
-      return el.id != action.payload
-    })
+    copied = copied.filter((el) => {
+      return el.id != action.payload;
+    });
+    return { ...state, todos: copied };
+  } else if (action.type == "CHECK_STATUS") {
+    copied = copied.map(el => {
+      if (el.id == action.payload.id) {
+        el.status = action.payload.status;
+      }
+      return el;
+    });
     return {...state, todos: copied}
-  } else if (action.type == "UPDATE_TODO") {
-
-  } else {
+  }else{
+    return state;
   }
-  return state;
 }
